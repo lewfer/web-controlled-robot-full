@@ -1,0 +1,21 @@
+
+<html>
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+
+      <!-- Jquery is useful to make some javascript simpler, e.g. the calls to the command urls -->
+      <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    </head>
+
+    <body>
+
+        <h1>Web controlled robots admin</h1>
+        <h2>Users:</h2>
+        <p>{{users|safe}}</p>
+
+        <h2>Robots:</h2>
+        <p>{{robots|safe}}</p>
+
+        <a href="#" onclick="$.get('/stopeverything')">Stop all robots and remove users</a>
+    </body>
+</html>
