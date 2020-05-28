@@ -86,15 +86,15 @@ def on_message(client, userdata, msg):
         ''' 
 
         if x > 20:
-            robot.right(map(x, 20, 100, 0, MAXSPEED*1.0))
+            robot.right(map(x, 20, 100, 0, MAXSPEED*1.0/100))
         elif x < -20:
-            robot.left(map(-x, 20, 100, 0, MAXSPEED*1.0))
+            robot.left(map(-x, 20, 100, 0, MAXSPEED*1.0/100))
         elif y < 0:
             #robot.backward(-y/100.0) 
-            robot.backward(map(-y, 0, 100, 0, MAXSPEED*1.0))
+            robot.backward(map(-y, 0, 100, 0, MAXSPEED*1.0/100))
         else:
             #robot.forward(y/100.0)     
-            robot.forward(map(y, 0, 100, 0, MAXSPEED*1.0))
+            robot.forward(map(y, 0, 100, 0, MAXSPEED*1.0/100))
 
 # Main program
 # -------------------------------------------------------------------------------------------------
