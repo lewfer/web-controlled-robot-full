@@ -18,7 +18,7 @@
 # -------------------------------------------------------------------------------------------------
 
 # Flask provides a framework for building web applications in Python
-from flask import Flask, render_template, Response, request, url_for, session, redirect
+from flask import Flask, render_template, Response, request, url_for, session, redirect,  send_file
 
 # Paho MQTT provides the ability to send messages from one computer to another using the MQTT protocol
 import paho.mqtt.publish as publish
@@ -126,6 +126,8 @@ def unlinkRobotAndUser():
 def userHasRobot():
     """Check if the current user has a robot"""
     userName = session['username']
+    if userName not in users:
+        return False 
     return users[userName]["robot"] is not None   
 
 
@@ -257,14 +259,16 @@ def checkavailability():
 @app.route('/room', methods = ['GET'])
 def room():
     # Don't allow calls here if user not logged in or has no robot
-    if not userLoggedIn() or not userHasRobot():
+    if not userLoggedIn():
+        return redirect(url_for('viewingroom'))
+    if not userHasRobot():
         return redirect(url_for('viewingroom'))
 
     # Get the time left in the room
     timeLeft = getTimeLeftInRoom() 
 
     # Show the room
-    return render_template('room.html', username=userName(), robotname=userRobot(), cameras=getRobotCameras(), timeinroom=timeLeft, timebeforeexit=TIME_BEFORE_EXIT)
+    return render_template('room.html', username=userName(), robotname=userRobot(), robotcolour=robotColours[userRobot()], cameras=getRobotCameras(), timeinroom=timeLeft, timebeforeexit=TIME_BEFORE_EXIT)
 
 
 # Player is redirected here when their time is up
@@ -282,29 +286,36 @@ def gameover():
 
 # When a request to the /video url is made, we run this
 @app.route('/video')
-def video_feed():          
-    # Pass in the generator function to the response.  Flask will then loop around, calling the generator.
-    # We use the multipart mime type.  In this case we have a video made up of multiple frames.
-    # I.e. we are saying that our content is made up of multiple parts (the frames).
-    return Response(player.genVideo(), mimetype='multipart/x-mixed-replace; boundary=frame')
+def video_feed(): 
+    if "Main" in cameras:
+        # Pass in the generator function to the response.  Flask will then loop around, calling the generator.
+        # We use the multipart mime type.  In this case we have a video made up of multiple frames.
+        # I.e. we are saying that our content is made up of multiple parts (the frames).
+        return Response(player.genVideo(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    else:
+        return send_file("holding-image.jpg", mimetype='image/jpeg')
 
 
 # When a request to view a camera is made, we run this
 @app.route('/camera/<camera_name>')
-def camera_feed(camera_name):       
-    print(camera_name, cameras[camera_name]) 
+def camera_feed(camera_name):      
+    if camera_name!="undefined":
+        print(camera_name, cameras[camera_name]) 
 
-    # Get the url for the camera
-    cameraUrl = cameras[camera_name] 
+        # Get the url for the camera
+        cameraUrl = cameras[camera_name] 
 
-    # Generate the video feed
-    if not DIRECT_CAMERA and cameraUrl.startswith("http"):
-        # The camera is running somewhere else, grab the content and pass it through
-        r = requests.get(cameraUrl, stream=True)
-        return Response(r.iter_content(chunk_size=10*1024), content_type=r.headers['Content-Type'])
-    else:
-        # The camera is running as part of this app.  Redirect to it
-        return redirect(cameraUrl)
+        # Generate the video feed
+        if not DIRECT_CAMERA and cameraUrl.startswith("http"):
+            # The camera is running somewhere else, grab the content and pass it through
+            r = requests.get(cameraUrl, stream=True)
+            return Response(r.iter_content(chunk_size=10*1024), content_type=r.headers['Content-Type'])
+        else:
+            # The camera is running as part of this app.  Redirect to it
+            return redirect(cameraUrl)
+
+    # No camera selected, so redirect to default one
+    return redirect(url_for('video_feed'))
 
 
 # When a control request comes in, we run this
@@ -315,7 +326,7 @@ def control(control_name):
 
     # Get the robot name
     robotName = userRobot()
-    print("Control ", userName(), robotName, control_name)
+    print("Control ", userName(), robotName, control_name, request.args.get('x'), request.args.get('y'))
 
     # If end of session, free up robot, delete user and stop robot
     if control_name=="end":

@@ -14,8 +14,8 @@ from flask import Flask, Response
 
 # We keep the video streaming code in a separate python file
 # Choose which streaming module you want
-#from pi_camera_player import VideoPlayer
-from webcam_player import VideoPlayer
+from pi_camera_player import VideoPlayer
+#from webcam_player import VideoPlayer
 
 # Constants
 # -------------------------------------------------------------------------------------------------
@@ -25,7 +25,7 @@ PORT = 5001
 # Global objects
 # -------------------------------------------------------------------------------------------------
 # Create our video player object
-player = VideoPlayer(resolution=(640,480), rotation=270)   
+player = VideoPlayer(resolution=(640,480), rotation=180)   
 
 # Create the Flask web application
 app = Flask(__name__)

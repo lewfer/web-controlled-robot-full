@@ -24,15 +24,21 @@ MAIN_CAMERA_RESOLUTION = (640,480)
 MAIN_CAMERA_ROTATION = 0
 
 # Dictionary of robots and who is controlling them (initially None)
-robots = {"clarissa":None, "petra":None, "betty":None}
+robots = {"edwina":None, "clarissa":None}
+
+# Dictionary of robot colours, to colour the trackpad.  These must match the robots dictionary above
+robotColours = {"edwina":"green", "clarissa":"red"}
+#robots = {"petra":None}
 
 # Dictionary of cameras, name and URL
-# First one (Main) should be left unchanged
+# First one (Main) should be left unchanged, unless you don't wan't a main camera
 # Additional ones can be added.
 # If additional ones are named with the robot name they are dedicated for the robot
-cameras = {"Main":"/video"}
-#cameras = {"Main":"/video", "Rear":"http://other:5001/video", "petra":"http://petra:5001/video"}
+# and are only shown to the controller of that robot
+#cameras = {"Main":"/video"}
+#cameras = {"Main":"/video", "edwina":"http://edwina:5001/video", "clarissa":"http://clarissa:5001/video"}
+cameras = {"edwina":"http://edwina:5001/video", "clarissa":"http://clarissa:5001/video"}
 
 # Time user is allowed in room
-TIME_IN_ROOM = 20;        # seconds allowed controlling robot in room
+TIME_IN_ROOM = 60;        # seconds allowed controlling robot in room
 TIME_BEFORE_EXIT = 10;    # seconds to stay in room after control finished

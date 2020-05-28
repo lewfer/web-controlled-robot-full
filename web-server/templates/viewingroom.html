@@ -15,6 +15,9 @@
       // Set the default camera
       function init() {
         document.getElementById("video").src = "/camera/" + cameraKeys[currentCamera];  
+
+        if (numCameras>0)
+          document.getElementById("cameraMessage").innerHTML = "--Click the video to switch cameras."
       }
 
       // Switch camera
@@ -29,15 +32,15 @@
   <body onload="init()">
     <div class="container">
       <h1>Web Controlled Robots!</h1>
-      <h2>You are in the viewing room</h2>
+      <h2>You are in the registration room</h2>
 
       <div class="responsive">
         <div class="responsiveitem">
-          <!--This is where the video will go.  The browser will request the video stream from the specified url. -->
           <img id="video" class="video" src="" draggable="false" onclick=switchCamera()>
         </div>
+      
         <div class="responsiveitem2">
-          <p>Click the video to switch cameras.</p>
+          <p id="cameraMessage"></p>
           <br>
           <p>Want to take part?</p>
           <form action = "/waitingroom" method = "post">

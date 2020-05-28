@@ -26,6 +26,8 @@ import paho.mqtt.client as mqtt         # provides IoT functionality to send mes
 MQTT_BROKER = "web-server"              # Change to name of your broker 
 MQTT_TOPIC = "robots/clarissa"          # Change to name of your topic
 
+MAXSPEED = 100                                       # Max % speed
+
 # Globals
 # -------------------------------------------------------------------------------------------------
 
@@ -35,6 +37,9 @@ robot = Robot(left=(19,26), right=(16,20))
 
 # Functions
 # -------------------------------------------------------------------------------------------------
+
+def map(n, a, b, c, d):
+    return (n-a) * (d-c)/(b-a)
 
 def on_connect(client, userdata, flags, rc):
     # Called when the client receives connection acknowledgement response from the broker
@@ -69,15 +74,27 @@ def on_message(client, userdata, msg):
         y = int(m[m.find(",")+1:])
         print(x,y)
 
-        if y < 0:
-            robot.backward(-y/100.0) 
-        elif x > 50:
+        '''
+        if x > 50:
             robot.right(y/100.0)
         elif x < -50:
             robot.left(y/100.0)
+        elif y < 0:
+            robot.backward(-y/100.0) 
         else:
-            robot.forward(y/100.0)      
-    
+            robot.forward(y/100.0)     
+        ''' 
+
+        if x > 20:
+            robot.right(map(x, 20, 100, 0, MAXSPEED*1.0))
+        elif x < -20:
+            robot.left(map(-x, 20, 100, 0, MAXSPEED*1.0))
+        elif y < 0:
+            #robot.backward(-y/100.0) 
+            robot.backward(map(-y, 0, 100, 0, MAXSPEED*1.0))
+        else:
+            #robot.forward(y/100.0)     
+            robot.forward(map(y, 0, 100, 0, MAXSPEED*1.0))
 
 # Main program
 # -------------------------------------------------------------------------------------------------
