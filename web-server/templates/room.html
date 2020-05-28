@@ -21,6 +21,9 @@
           // Set the default camera
           function initCamera() {
             document.getElementById("video").src = "/camera/" + cameraKeys[currentCamera]; //cameraValues[currentCamera];
+
+            if (numCameras>1)
+              document.getElementById("cameraMessage").innerHTML = "Click the video to switch cameras."
           }
 
           // Switch camera
@@ -225,6 +228,7 @@
           <div class="responsiveitem">
             <!--This is where the video will go.  The browser will request the video stream from the specified url. -->
             <img id="video" class="video" src="" draggable="false" onclick=switchCamera()>
+            <p class="small" id="cameraMessage"></p>
           </div>
           <!--This is the trackpad -->
           <div class="responsiveitem2">

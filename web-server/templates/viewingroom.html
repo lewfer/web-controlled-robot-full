@@ -16,8 +16,8 @@
       function init() {
         document.getElementById("video").src = "/camera/" + cameraKeys[currentCamera];  
 
-        if (numCameras>0)
-          document.getElementById("cameraMessage").innerHTML = "--Click the video to switch cameras."
+        if (numCameras>1)
+          document.getElementById("cameraMessage").innerHTML = "Click the video to switch cameras."
       }
 
       // Switch camera
