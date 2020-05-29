@@ -2,7 +2,7 @@
 
 These are brief notes and are not intended to be a full tutorial.  A simpler version of this code is explained in detail here:
 
-https://www.thinkcreatelearn.co.uk/resources/web-controlled-robot.html
+https://www.thinkcreatelearn.co.uk/resources/web-controlled-robot
 
 
 The project contains 2 directories.  
@@ -13,21 +13,11 @@ The robot directory contains the code for the robot.  Install this on each Raspb
 
 ## Web server setup
 
-Follow the setup instructions here to install OpenCV, Numpy, Mosquitto and Paho:
+Follow the setup instructions here to install Mosquitto and Paho:
 
-https://www.thinkcreatelearn.co.uk/resources/web-controlled-robot.html
+https://www.thinkcreatelearn.co.uk/resources/web-controlled-robot
 
-
-Find the following lines in the Global objects section of the code:
-
-<pre>
-robots = {"petra":None, "betty":None}
-
-# List of cameras
-cameras = {"Main":"/video", "Rear":"http://petra:5001/video"}
-</pre>
-
-Enter the name of your robots and the URL of your additional cameras.  Leave the main camera as-is.  Note that when you test this locally and connected to the internet the URLs will be different.  
+Open up web_site_settings.py and edit the list of robots, robot colours and cameras according to your setup.  The comments in the code should help.
 
 Start the web application by running:
 
@@ -40,11 +30,12 @@ On each computer running additional cameras, run:
 
 > python3 streamvideo.py
 
-or, you can run the simpler version on Raspberry Pi's with a Raspberry Pi camera (this version doesn't need OpenCV):
-
-> python3 streamsimple.py
-
 Note that you can alter the code to rotate the camera, change the resolution, etc.
+
+As well as Raspberry Pi cameras, you can use webcams.  For this, you will need to comment out the line that imports from pi_camera_player and uncomment the line that uses webcam_player.  Note that you will need to install OpenCV for this to work.
+
+#from pi_camera_player import VideoPlayer
+from webcam_player import VideoPlayer
 
 ## Robot setup
 
@@ -66,6 +57,6 @@ Start the robot:
 
 ## Exposing your server on the internet
 
-The best way to do this is to set up port forwarding on your router.  Otherwise you could use a service like ngrok.
+The best way to do this is to set up port forwarding or a DMZ on your router.  Otherwise you could use a service like ngrok.
 
 
