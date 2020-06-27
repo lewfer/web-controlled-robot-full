@@ -2,7 +2,7 @@
 
 These are brief notes and are not intended to be a full tutorial.  A simpler version of this code is explained in detail here:
 
-https://www.thinkcreatelearn.co.uk/resources/web-controlled-robot.html
+https://www.thinkcreatelearn.co.uk/resources/web-controlled-robot
 
 
 The project contains 2 directories.  
@@ -15,7 +15,7 @@ The robot directory contains the code for the robot.  Install this on each Raspb
 
 Follow the setup instructions here to install Mosquitto and Paho:
 
-https://www.thinkcreatelearn.co.uk/resources/web-controlled-robot.html
+https://www.thinkcreatelearn.co.uk/resources/web-controlled-robot
 
 
 Edit the sessings in web_site_settings.py
