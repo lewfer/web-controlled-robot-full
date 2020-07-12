@@ -104,8 +104,18 @@ or
 Run streamvideo.py on the robot.
 Change the camera config if required in pi_camera_player.py.
 
+Note that to reduce bandwidth use, use the lowest quality settings on the robot camera.  These are fine:
+
+<pre>
+RESOLUTION = (160,120)
+JPEGQUALITY = 10
+FPS = 5
+</pre>
+
 ### On the main website:
 Add the camera to the cameras dictionary in web_site_settings.py.
+
+
 
 
 ## Exposing your server on the internet
