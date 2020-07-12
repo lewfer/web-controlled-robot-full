@@ -31,6 +31,10 @@
         $.get('/checkavailability', function(data){
           if (data!="")
             window.location.href = "/room";
+
+        $.get('/robotlist', function(data) {
+              document.getElementById("robotlist").innerHTML = data;
+            })            
         });
       }, CHECKROOMFREQUENCY);   
 
@@ -50,6 +54,7 @@
           <p>You will automatically be entered in the room when a robot becomes available...</p>
           <h1>Get ready!!</h1>
           <p>To control the robot, click and drag in the square.  Use it like a joystick.  Centre is stop, up is forward, down is backward, left is left, right is right.</p>
+          <div class="info">Currently in the room: <span id="robotlist">-</span></div>
         </div>
       </div> 
     </div>

@@ -1,0 +1,16 @@
+- Need to HTML encode user names - will prevent crash of admin screen at line 374:
+            robotlist += "<li>" + name + " assigned to " + str(info) + "</li>"  
+
+- Admin control to kick out individual
+- Admin control to reboot robot
+- Admin control to assign robot to person
+- Waiting room to show who has what robot
+- Add arrows to control pad
+- Keyboard control
+- Robots to join zoom call for camera?
+- Fix issue where stuck in waiting room
+
+- Competition ideas
+	Carrying stuff
+	More direct competition
+	Pacman 

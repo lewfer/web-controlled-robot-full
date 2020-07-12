@@ -25,8 +25,8 @@ import paho.mqtt.publish as publish
 
 # We keep the video streaming code in a separate python file
 # Choose which streaming module you want
-from pi_camera_player import VideoPlayer
-#from webcam_player import VideoPlayer
+#from pi_camera_player import VideoPlayer
+from webcam_player import VideoPlayer
 
 # Allow us to pass Python dictionaries to javascript
 import json
@@ -91,6 +91,7 @@ def handleLoginForm(loginForm):
     if 'username' in session:
         if requestedUsername == session['username']:
             print("Matches session")
+            users[requestedUsername] = {"robot":None, "inroom":0}     # save username in the database
             return redirect(url_for('waitingroom'))
 
     # If requested username already exists, try again !! but what if same user logging in from elsewhere?
@@ -113,14 +114,16 @@ def linkRobotAndUser(robotName):
     users[userName]["robot"] = robotName        # link robot to user
 
 
-def unlinkRobotAndUser():
+def unlinkRobotAndUser(userName=None):
     """Free up the robot for another user and remove the user"""
-    userName = session['username']              # get current user
+    if userName is None:
+        userName = session['username']              # get current user
     robotName = users[userName]["robot"]        # get their robot name
     robots[robotName] = None                    # unlink the user from the robot
     users[userName]["robot"] = None             # unlink the robot from the user
     users.pop(userName, None)                   # remove the username
     session.clear()                             # clear the user name from the session
+
 
 
 def userHasRobot():
@@ -155,8 +158,27 @@ def stopEverything():
         robots[name] = None
 
     # Remove all users
-    users = {}
+    users.clear()
 
+def stopRobot(robot_name):
+    topic = MQTT_TOPIC + robot_name
+    publish.single(topic, "stop", hostname=MQTT_SERVER)
+
+def forwardRobot(robot_name):
+    topic = MQTT_TOPIC + robot_name
+    publish.single(topic, "forward", hostname=MQTT_SERVER)
+
+def backwardRobot(robot_name):
+    topic = MQTT_TOPIC + robot_name
+    publish.single(topic, "backward", hostname=MQTT_SERVER)
+
+def leftRobot(robot_name):
+    topic = MQTT_TOPIC + robot_name
+    publish.single(topic, "left", hostname=MQTT_SERVER)    
+
+def rightRobot(robot_name):
+    topic = MQTT_TOPIC + robot_name
+    publish.single(topic, "right", hostname=MQTT_SERVER)        
 
 def getTimeInSeconds():
     """Get the current system time in seconds"""
@@ -241,7 +263,7 @@ def checkavailability():
     robotName = userRobot()
     if userRobot() is not None:
         print("User already has robot", robotName, ".  Kicking out")
-        return redirect(url_for('gameover'))  
+        return redirect(url_for('gameover'+userName()))  
 
     # Check if robot available and handle accordingly
     robotName = robotAvailable()
@@ -270,17 +292,30 @@ def room():
     # Show the room
     return render_template('room.html', username=userName(), robotname=userRobot(), robotcolour=robotColours[userRobot()], cameras=getRobotCameras(), timeinroom=timeLeft, timebeforeexit=TIME_BEFORE_EXIT)
 
+# Callback to check if the user hasn't been kicked out
+@app.route('/checkuserlive/<username>')
+def checkuserlive(username):
+    if username in users:
+        return Response('alive')
+    else:
+        return Response('dead')
+
+
+
 
 # Player is redirected here when their time is up
-@app.route('/gameover')
-def gameover():
+@app.route('/gameover/<username>')
+def gameover(username):
     print("Game over")
     # Don't allow calls here if user not logged in
     if not userLoggedIn():
         return redirect(url_for('viewingroom'))
 
     # Free up the robot and return to the viewing room
-    unlinkRobotAndUser()
+    try:
+        unlinkRobotAndUser()
+    except:
+        pass
     return redirect(url_for('viewingroom'))   
 
 
@@ -362,20 +397,20 @@ def admin():
         if request.form['password']!='friskyrobot':
             return 'Not allowed'
 
-        # Build list of users as HTML
-        userlist = "<ul>"
-        for name, info in users.items():
-            userlist += "<li>" + name + " ==> " + str(info) + "</li>"
-        userlist += "</ul>"
-
-        # Build list of robots as HTML
-        robotlist = "<ul>"
+        # Popuate control options for robots
+        options = ""
         for name, info in robots.items():
-            robotlist += "<li>" + name + " assigned to " + str(info) + "</li>"  
-        robotlist += "</ul>"   
+            options += '<a href="#" onclick="$.get(\'/disable/' + name + '\')">Disable ' + name + '</a><br>'
+            options += '<a href="#" onclick="$.get(\'/enable/' + name + '\')">Enable ' + name + '</a><br>'
+            options += '<a href="#" onclick="$.get(\'/forward/' + name + '\')">Forward ' + name + '</a><br>'
+            options += '<a href="#" onclick="$.get(\'/backward/' + name + '\')">Backward ' + name + '</a><br>'
+            options += '<a href="#" onclick="$.get(\'/left/' + name + '\')">Left ' + name + '</a><br>'
+            options += '<a href="#" onclick="$.get(\'/right/' + name + '\')">Right ' + name + '</a><br>'
+            options += '<a href="#" onclick="$.get(\'/stop/' + name + '\')">Stop ' + name + '</a><br>'
+            options += '<br>'
 
         # Render the admin page
-        return render_template('admin.html', users=userlist, robots=robotlist)    
+        return render_template('admin.html', options=options)    
 
 
 # When a request for the admin screen comes in
@@ -386,6 +421,70 @@ def stopeverything():
     session.clear() 
     return Response('')
 
+@app.route('/disable/<robot_name>', methods = ['GET'])
+def disableRobot(robot_name):
+    robots[robot_name] = "disabled"
+    stopRobot(robot_name)
+
+    for name, info in users.items():
+        if info["robot"]==robot_name:
+            del users[name]
+
+    return Response('')
+
+@app.route('/enable/<robot_name>', methods = ['GET'])
+def enableRobot(robot_name):
+    robots[robot_name] = None
+    return Response('')
+
+@app.route('/stop/<robot_name>', methods = ['GET'])
+def stopRobotHandler(robot_name):
+    stopRobot(robot_name)
+    return Response('')  
+
+@app.route('/forward/<robot_name>', methods = ['GET'])
+def forwardRobotHandler(robot_name):
+    forwardRobot(robot_name)
+    return Response('')         
+
+@app.route('/backward/<robot_name>', methods = ['GET'])
+def backwardRobotHandler(robot_name):
+    backwardRobot(robot_name)
+    return Response('')      
+
+@app.route('/left/<robot_name>', methods = ['GET'])
+def leftRobotHandler(robot_name):
+    leftRobot(robot_name)
+    return Response('')    
+
+@app.route('/right/<robot_name>', methods = ['GET'])
+def rightRobotHandler(robot_name):
+    rightRobot(robot_name)
+    return Response('')    
+
+@app.route('/remove/<user_name>', methods = ['GET'])
+def removeUser(user_name):
+    unlinkRobotAndUser(userName=user_name)
+    return Response('')
+
+
+@app.route('/robotlist')
+def robotList():
+    # Build list of robots as HTML
+    robotlist = "<ul class='info'>"
+    for name, info in robots.items():
+        robotlist += "<li>Robot " + name + " assigned to user " + str(info) + "</li>"  
+    robotlist += "</ul>"  
+    return Response(robotlist) 
+
+@app.route('/userlist')
+def userList():
+    # Build list of users as HTML
+    userlist = "<ul class='info'>"
+    for name, info in users.items():
+        userlist += "<li>User " + name + " ==> " + str(info) + "</li>"
+    userlist += "</ul>"
+    return Response(userlist) 
 
 # Run the web site.  Specifying 0.0.0.0 as the host makes it visible to the rest of the network.
 # We runs as a threaded site so we can have multiple clients connect and so the site responds to user interaction when busy streaming

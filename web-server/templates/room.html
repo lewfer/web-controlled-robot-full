@@ -73,6 +73,15 @@
               }
               mouseMovedCount--;
 
+              // Check if user is still alive or has been kicked out
+              $.get('/checkuserlive/{{username}}', function(data){
+                  if (data=="dead") {
+                    console.log("User kicked out")
+                    clearInterval(x);
+                    window.location.href = "/gameover/{{username}}";
+                  }
+              })
+
               // Send the last stored command to the robot
               if (lastCommand!="")
                 $.get(lastCommand);
@@ -88,7 +97,7 @@
               if (timer < -TIMEBEFOREEXIT) {
                 // Time to leave the room
                 clearInterval(x);
-                window.location.href = "/gameover";
+                window.location.href = "/gameover/{{username}}";
               }
               else if (timer < 0) {
                 // Time over, so inform user

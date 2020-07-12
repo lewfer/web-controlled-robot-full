@@ -36,8 +36,8 @@ robotColours = {"edwina":"green", "clarissa":"red"}
 # If additional ones are named with the robot name they are dedicated for the robot
 # and are only shown to the controller of that robot
 #cameras = {"Main":"/video"}
-#cameras = {"Main":"/video", "edwina":"http://edwina:5001/video", "clarissa":"http://clarissa:5001/video"}
-cameras = {"edwina":"http://edwina:5001/video", "clarissa":"http://clarissa:5001/video"}
+cameras = {"Main":"/video", "edwina":"http://edwina:5001/video", "clarissa":"http://clarissa:5001/video"}
+#cameras = {"edwina":"http://edwina:5001/video", "clarissa":"http://clarissa:5001/video"}
 
 # Time user is allowed in room
 TIME_IN_ROOM = 60;        # seconds allowed controlling robot in room

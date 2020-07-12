@@ -5,17 +5,37 @@
 
       <!-- Jquery is useful to make some javascript simpler, e.g. the calls to the command urls -->
       <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+      <script>
+        var x = setInterval(function() {
+          var robotlist = $.get('/userlist', function(data) {
+            document.getElementById("userlist").innerHTML = data;
+          })
+          var robotlist = $.get('/robotlist', function(data) {
+            document.getElementById("robotlist").innerHTML = data;
+          })
+        }, 1000);   // wait 1 second between time ticks
+      </script>
     </head>
 
     <body>
 
         <h1>Web controlled robots admin</h1>
         <h2>Users:</h2>
-        <p>{{users|safe}}</p>
+        <div class="info"><span id="userlist">-</span></div>
 
-        <h2>Robots:</h2>
-        <p>{{robots|safe}}</p>
+        <label >Remove User:</label><br>
+        <input type="text" id="username">
+        
+        <a href="#" onclick="$.get('/remove/' + document.getElementById('username').value)">Remove user</a><br><br>
 
-        <a href="#" onclick="$.get('/stopeverything')">Stop all robots and remove users</a>
+
+        <h2>Robots:</h2>        
+        <div class="info"><span id="robotlist">-</span></div>
+
+        {{options|safe}}
+
+        <br><br>
+        <a href="#" onclick="$.get('/stopeverything')">STOP ALL ROBOTS AND REMOVE ALL USERS</a>
     </body>
 </html>

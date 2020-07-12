@@ -5,6 +5,8 @@
     <title>Web Controlled Robots</title>
     <link href="/static/styles/main.css" rel="stylesheet" type="text/css">
     <script>
+      var CHECKROOMFREQUENCY = 5000
+      
       // Get the camera info from the Flask app
       var cameras = {{cameras|safe}};
       var cameraKeys = Object.keys(cameras);
@@ -26,6 +28,13 @@
         if (currentCamera>=numCameras) currentCamera = 0;
         document.getElementById("video").src = "/camera/" + cameraKeys[currentCamera];
       }
+
+      var x = setInterval(function() {
+          $.get('/robotlist', function(data) {
+            document.getElementById("robotlist").innerHTML = data;
+          })
+      }, CHECKROOMFREQUENCY);   
+  
     </script>
   </head>
 
@@ -45,8 +54,10 @@
           <p>Want to take part?</p>
           <form action = "/waitingroom" method = "post">
             <p><label>Enter your name: </label><input type = "text" name = "username"/></p>
-          <input type="submit" value = "Enter the waiting room"/>
-        </form>
+            <input type="submit" value = "Enter the waiting room"/>
+          </form>
+
+          <div class="info">Currently in the room: <span id="robotlist">-</span></div>
         </div>
       </div>
     </div> 

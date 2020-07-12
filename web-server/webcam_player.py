@@ -18,7 +18,7 @@ import cv2
 # Constants
 # -------------------------------------------------------------------------------------------------
 
-RESOLUTION = (640,480)      # camera resolution
+RESOLUTION = (320,240)      # camera resolution
 ROTATION = 180              # camera rotation
 FPS = 15                    # video frames per second.  Reduce if bandwidth is an issue, increase if quality is an issue
 
