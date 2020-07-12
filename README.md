@@ -2,7 +2,7 @@
 
 These are brief notes and are not intended to be a full tutorial.  A simpler version of this code is explained in detail here:
 
-https://www.thinkcreatelearn.co.uk/resources/web-controlled-robot.html
+https://www.thinkcreatelearn.co.uk/resources/web-controlled-robot
 
 
 The project contains 2 directories.  
@@ -15,7 +15,7 @@ The **robot** directory contains the code for the robot.  Install this on each R
 
 Follow the setup instructions here to install Mosquitto and Paho:
 
-https://www.thinkcreatelearn.co.uk/resources/web-controlled-robot.html
+https://www.thinkcreatelearn.co.uk/resources/web-controlled-robot
 
 
 Edit the settings in **web_site_settings.py**.
@@ -69,9 +69,9 @@ You can install additional cameras, on different machines around the room.  On e
 
 > python3 streamvideo.py
 
-or, you can run the simpler version on Raspberry Pi's with a Raspberry Pi camera (this version doesn't need OpenCV):
+Note that you can alter the code to rotate the camera, change the resolution, etc.
 
-> python3 streamsimple.py
+As well as Raspberry Pi cameras, you can use webcams.  For this, you will need to comment out the line that imports from pi_camera_player and uncomment the line that uses webcam_player.  Note that you will need to install OpenCV for this to work.
 
 The URL for the camera needs to be added to the cameras dictionary in web_site_settings.py.
 
