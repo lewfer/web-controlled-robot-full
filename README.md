@@ -17,7 +17,6 @@ Follow the setup instructions here to install Mosquitto and Paho:
 
 https://www.thinkcreatelearn.co.uk/resources/web-controlled-robot
 
-<<<<<<< HEAD
 
 Edit the settings in **web_site_settings.py**.
 
@@ -31,9 +30,6 @@ cameras = {"Main":"/video", "Rear":"http://petra:5001/video"}
 </pre>
 
 Enter the name of your robots and the URL of your additional cameras.  Leave the main camera as-is.  Note that when you test this locally and connected to the internet the URLs will be different.  
-=======
-Open up web_site_settings.py and edit the list of robots, robot colours and cameras according to your setup.  The comments in the code should help.
->>>>>>> d25a2b755924ec8eb8ded6b076c5b00a827e1a59
 
 In web_site.py you can change between a standard webcam 
 
@@ -77,14 +73,9 @@ Note that you can alter the code to rotate the camera, change the resolution, et
 
 As well as Raspberry Pi cameras, you can use webcams.  For this, you will need to comment out the line that imports from pi_camera_player and uncomment the line that uses webcam_player.  Note that you will need to install OpenCV for this to work.
 
-<<<<<<< HEAD
 The URL for the camera needs to be added to the cameras dictionary in web_site_settings.py.
 
 Note that you can alter the code to rotate the camera, change the resolution, etc.
-=======
-#from pi_camera_player import VideoPlayer
-from webcam_player import VideoPlayer
->>>>>>> d25a2b755924ec8eb8ded6b076c5b00a827e1a59
 
 ## Robot setup
 
@@ -129,7 +120,6 @@ Add the camera to the cameras dictionary in web_site_settings.py.
 
 ## Exposing your server on the internet
 
-<<<<<<< HEAD
 The best way to do this is to set up a DMZ or port forwarding on your router.  Otherwise you could use a service like ngrok.
 
 
@@ -179,9 +169,6 @@ WantedBy=timers.target
 Enable the timer:
 
 > sudo systemctl enable myservice.timer
-=======
-The best way to do this is to set up port forwarding or a DMZ on your router.  Otherwise you could use a service like ngrok.
->>>>>>> d25a2b755924ec8eb8ded6b076c5b00a827e1a59
 
 Reboot the Pi.
 
