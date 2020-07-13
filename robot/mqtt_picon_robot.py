@@ -66,17 +66,17 @@ def on_message(client, userdata, msg):
         if y > 0:
             if x > 20:
                 leftMotorSpeed = map(x, 20, 100, 0, MAXSPEED)
-                rightMotorSpeed = 0
+                rightMotorSpeed = leftMotorSpeed/2
             elif x < -20:
-                leftMotorSpeed = 0
                 rightMotorSpeed = map(-x, 20, 100, 0, MAXSPEED)
+                leftMotorSpeed = rightMotorSpeed/2
         else:
             if x > 20:
                 leftMotorSpeed = map(x, 20, 100, -0, -MAXSPEED)
-                rightMotorSpeed = 0
+                rightMotorSpeed = leftMotorSpeed/2
             elif x < -20:
-                leftMotorSpeed = 0
                 rightMotorSpeed = map(-x, 20, 100, -0, -MAXSPEED)
+                leftMotorSpeed = rightMotorSpeed/2
 
         '''            
         # Adjust motor speed based on right-left axis
