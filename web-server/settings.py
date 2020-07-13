@@ -19,9 +19,11 @@ MQTT_TOPIC = "robots/"                  # Change to name of your topic
 # Use pass through (i.e. set to False) if you are hosting the web site in a DMZ and just want to expose the main web site
 DIRECT_CAMERA = False
 
-# Settings for main camera (the one attached to the web server)
-MAIN_CAMERA_RESOLUTION = (640,480)
-MAIN_CAMERA_ROTATION = 0
+# Settings for main camera (the one attached to the web server)# Settings for main camera (the one attached to the web server)
+RESOLUTION = (640,480)      # camera resolution
+ROTATION = 0                # camera rotation
+JPEGQUALITY = 10            # 0 to 100, higher is better quality but more data
+FPS = 5                     # video frames per second.  Reduce if bandwidth is an issue, increase if quality is an issue
 
 # Dictionary of robots and who is controlling them (initially None)
 robots = {"edwina":None, "clarissa":None}
@@ -42,3 +44,7 @@ cameras = {"Main":"/video", "edwina":"http://edwina:5001/video", "clarissa":"htt
 # Time user is allowed in room
 TIME_IN_ROOM = 60;        # seconds allowed controlling robot in room
 TIME_BEFORE_EXIT = 10;    # seconds to stay in room after control finished
+
+
+# Stream video for main camera
+VIDEO_STREAM_PORT = 5001

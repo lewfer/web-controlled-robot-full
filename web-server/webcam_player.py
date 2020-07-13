@@ -15,12 +15,11 @@ import threading
 import numpy as np
 import cv2 
 
-# Constants
+# Settings
 # -------------------------------------------------------------------------------------------------
 
-RESOLUTION = (320,240)      # camera resolution
-ROTATION = 180              # camera rotation
-FPS = 15                    # video frames per second.  Reduce if bandwidth is an issue, increase if quality is an issue
+# If you need to change the defaults, change them in settings.py:
+from settings import *
 
 
 class VideoPlayer(object):

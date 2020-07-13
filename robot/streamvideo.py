@@ -23,6 +23,7 @@ from pi_camera_player import VideoPlayer
 # If you need to change the defaults, change them in settings.py:
 from settings import *
 
+
 # Global objects
 # -------------------------------------------------------------------------------------------------
 # Create our video player object

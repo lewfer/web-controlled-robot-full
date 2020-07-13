@@ -17,9 +17,8 @@ import paho.mqtt.client as mqtt
 # Constants
 # ======================================================================================================
 
-MQTT_SERVER = "web-server"                           # Change to name of your broker 
-MQTT_TOPIC = "robots/edwina"                         # Change to name of your topic
-MAXSPEED = 100                                       # Max % speed
+# If you need to change the defaults, change them in settings.py:
+from settings import *
 
 # ======================================================================================================
 # Global variables
@@ -99,19 +98,22 @@ def on_message(client, userdata, msg):
 # Main program
 # ======================================================================================================
 
+# Create an MQTT client, which will allow the robot to receive messages
 client = mqtt.Client()
+
+# Set up the function that will be called when we connect to the broker
 client.on_connect = on_connect
+
+# Set up the function that will be called when we receive a message
 client.on_message = on_message
- 
-client.connect(MQTT_SERVER, 1883, 60)
+
+# Connect to the broker, so we can receive messages
+client.connect(MQTT_BROKER, port=1883, keepalive=60)
 
 
 robot.start()
  
-# Blocking call that processes network traffic, dispatches callbacks and
-# handles reconnecting.
-# Other loop*() functions are available that give a threaded interface and a
-# manual interface.
+# Connect to the broker, so we can receive messages
 client.loop_forever()
 
 

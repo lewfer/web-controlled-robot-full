@@ -19,14 +19,12 @@
 from gpiozero import Robot              # controls the robot hardware
 import paho.mqtt.client as mqtt         # provides IoT functionality to send messages between computers
 
-# Constants
+# Settings
 # -------------------------------------------------------------------------------------------------
 
-# Settings for MQTT communication
-MQTT_BROKER = "web-server"              # Change to name of your broker 
-MQTT_TOPIC = "robots/clarissa"          # Change to name of your topic
+# If you need to change the defaults, change them in settings.py:
+from settings import *
 
-MAXSPEED = 100                                       # Max % speed
 
 # Globals
 # -------------------------------------------------------------------------------------------------
@@ -109,7 +107,7 @@ client.on_connect = on_connect
 client.on_message = on_message
  
 # Connect to the broker, so we can receive messages
-client.connect(MQTT_BROKER)
+client.connect(MQTT_BROKER, port=1883, keepalive=60)
  
 # Now just loop, waiting for messages
 client.loop_forever()

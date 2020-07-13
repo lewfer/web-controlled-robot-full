@@ -1,0 +1,11 @@
+[Unit]
+Description=Web robot systemd service.
+
+[Service]
+Type=simple
+User=pi
+ExecStart=/bin/bash /usr/bin/runrobot.sh
+
+[Install]
+WantedBy=multi-user.target
+

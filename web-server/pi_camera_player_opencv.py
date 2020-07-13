@@ -31,14 +31,11 @@ import threading
 from time import sleep
 
 
-# Constants
+# Settings
 # -------------------------------------------------------------------------------------------------
 
-#RESOLUTION = (320,240)      # camera resolution
-RESOLUTION = (640,480)      # camera resolution
-ROTATION = 180              # camera rotation
-JPEGQUALITY = 90            # 0 to 100, higher is better quality but more data
-FPS = 15                    # video frames per second.  Reduce if bandwidth is an issue, increase if quality is an issue
+# If you need to change the defaults, change them in settings.py:
+from settings import *
 
 
 # Class definition

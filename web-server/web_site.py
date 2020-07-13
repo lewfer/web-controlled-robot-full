@@ -45,13 +45,13 @@ import time
 # -------------------------------------------------------------------------------------------------
 
 # Get settings from an external modules so they are all in one place
-from web_site_settings import *
+from settings import *
 
 
 # Global objects
 # -------------------------------------------------------------------------------------------------
 # Create our video player object
-player = VideoPlayer(resolution=MAIN_CAMERA_RESOLUTION, rotation=MAIN_CAMERA_ROTATION)   
+player = VideoPlayer()   
 
 # Create the Flask web application
 app = Flask(__name__)
@@ -263,7 +263,7 @@ def checkavailability():
     robotName = userRobot()
     if userRobot() is not None:
         print("User already has robot", robotName, ".  Kicking out")
-        return redirect(url_for('gameover'+userName()))  
+        return redirect(url_for('gameover', username=userName()))  
 
     # Check if robot available and handle accordingly
     robotName = robotAvailable()
